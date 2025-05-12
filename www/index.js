@@ -25,6 +25,7 @@ const themes = [
                 preview: true,
                 opacity: true,
                 hue: true,
+                gradient: true,
 
                 interaction: {
                     hex: true,
@@ -55,6 +56,7 @@ const themes = [
                 preview: true,
                 opacity: true,
                 hue: true,
+                gradient: true,
 
                 interaction: {
                     hex: false,
@@ -85,6 +87,7 @@ const themes = [
                 preview: true,
                 opacity: true,
                 hue: true,
+                gradient: true,
 
                 interaction: {
                     hex: false,

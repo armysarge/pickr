@@ -1,9 +1,13 @@
+# Pickr (Extended Version)
+
+> This is a modified version of [@simonwep/pickr](https://github.com/Simonwep/pickr) with added gradient support.
+
 <h3 align="center">
     <img src="https://user-images.githubusercontent.com/30767528/57573928-1e78db80-7430-11e9-940c-aecbf3226b7c.png" alt="Logo">
 </h3>
 
 <h3 align="center">
-    Flat, Simple, Hackable Color-Picker.
+    Flat, Simple, Hackable Color-Picker with Gradient Support
 </h3>
 
 <h5 align="center">
@@ -58,6 +62,12 @@
 * 🎨 Swatches for quick-selection
 * ♿ Fully accessible and i18n
 * 🌑 Shadow-dom support
+* 🌈 Gradient Support
+  * Linear, Radial and Conic gradients
+  * Adjustable angle
+  * Two-color stops
+  * Live preview
+  * Easy toggling between solid color and gradient modes
 
 ### Status of this project
 
@@ -365,6 +375,22 @@ const pickr = new Pickr({
 });
 ```
 
+## Gradient Options
+The gradient feature adds the following options:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| gradient.enabled | Boolean | false | Enable/disable gradient mode |
+| gradient.type | String | 'linear' | Type of gradient ('linear', 'radial', 'conic') |
+| gradient.angle | Number | 90 | Angle for linear/conic gradients (0-360) |
+| gradient.colors | Array | ['#000000', '#ffffff'] | Array of two colors for gradient stops |
+
+## Gradient Methods
+* pickr.setGradient(enabled`:Boolean`) _- Enable/disable gradient mode_
+* pickr.setGradientType(type`:String`) _- Set gradient type ('linear', 'radial', 'conic')_
+* pickr.setGradientAngle(angle`:Number`) _- Set gradient angle (0-360)_
+* pickr.setGradientColors(colors`:Array`) _- Set gradient colors_
+
 ## Selection through a Shadow-DOM
 Example setup:
 ```html
@@ -436,7 +462,7 @@ If `silent` is true (Default is false), the button won't change the current colo
 **Pickr.utils**
 * once(element`:HTMLElement`, event`:String`, fn`:Function`[, options `:Object`]) _- Attach an event handle which will be fired only once_
 * on(elements`:HTMLElement(s)`, events`:String(s)`, fn`:Function`[, options `:Object`]) _- Attach an event handler function._
-* off(elements`:HTMLElement(s)`, event`:String(s)`, fn`:Function`[, options `:Object`]) _- Remove an event handler._
+* off(elements`:HTMLElement(s)`, event`:String`, fn`:Function`[, options `:Object`]) _- Remove an event handler._
 * createElementFromString(html`:String`)`:HTMLElement` _- Creates an new HTML Element out of this string._
 * eventPath(evt`:Event`)`:[HTMLElement]` _- A polyfill for the event-path event propery._
 * createFromTemplate(str`:String`) _- See [inline doumentation](https://github.com/Simonwep/pickr/blob/master/src/js/lib/utils.js#L88)._

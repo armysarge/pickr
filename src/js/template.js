@@ -45,6 +45,42 @@ export default instance => {
 
           <div class="pcr-swatches ${components.palette ? '' : 'pcr-last'}" :ref="swatches"></div>
 
+          <div :obj="gradient" class="pcr-color-gradient" ${hidden(components.gradient)}>
+            <div class="pcr-gradient-header">
+              <div class="pcr-gradient-heading">Gradient</div>
+              <label class="pcr-gradient-switch">
+                <input type="checkbox" :ref="gradientEnabled" checked aria-label="${t('aria:gradient:enable', 'enable gradient mode')}">
+                <span class="pcr-gradient-slider"></span>
+              </label>
+            </div>
+            <div class="pcr-gradient-preview" :ref="preview"></div>
+            <div class="pcr-gradient-controls">
+              <div class="pcr-gradient-control">
+                <label class="pcr-gradient-label">Type</label>
+                <div class="pcr-gradient-type">
+                  <select :ref="gradientType" aria-label="${t('aria:gradient:type', 'gradient type selector')}">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                    <option value="conic">Conic</option>
+                  </select>
+                </div>
+              </div>
+              <div class="pcr-gradient-control">
+                <label class="pcr-gradient-label">Angle</label>
+                <div class="pcr-gradient-angle">
+                  <input :ref="gradientAngle" type="number" min="0" max="360" value="90" aria-label="${t('aria:gradient:angle', 'gradient angle')}" data-type="linear">
+                </div>
+              </div>
+            </div>
+            <div class="pcr-gradient-colors" :ref="colors">
+              <label class="pcr-gradient-label">Colors</label>
+              <div class="pcr-gradient-color-container">
+                <div :ref="color1" class="pcr-gradient-color active"></div>
+                <div :ref="color2" class="pcr-gradient-color"></div>
+              </div>
+            </div>
+          </div>
+
           <div :obj="interaction" class="pcr-interaction" ${hidden(Object.keys(components.interaction).length)}>
             <input :ref="result" class="pcr-result" type="text" spellcheck="false" ${hidden(components.interaction.input)} aria-label="${t('aria:input', 'color input field')}">
 

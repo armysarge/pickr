@@ -54,6 +54,13 @@ export default class Pickr {
             interaction: {}
         },
 
+        gradient: {
+            enabled: false,
+            type: 'linear',
+            angle: 90,
+            colors: ['#000000', '#ffffff']
+        },
+
         i18n: {},
         swatches: null,
         inline: false,
@@ -125,6 +132,7 @@ export default class Pickr {
         this._preBuild();
         this._buildComponents();
         this._bindEvents();
+        this._initGradient();
         this._finalBuild();
 
         // Append pre-defined swatch colors
@@ -508,6 +516,115 @@ export default class Pickr {
         this._eventBindings = eventBindings;
     }
 
+    _initGradient() {
+        const {_root, options} = this;
+        const gradient = _root.gradient;
+
+        if (!gradient) return;
+
+        // Initialize gradient state
+        this._gradientState = {
+            enabled: options.gradient.enabled,
+            type: options.gradient.type,
+            angle: options.gradient.angle,
+            activeColor: 0,
+            colors: options.gradient.colors.map(color => {
+                const {values} = this._parseLocalColor(color);
+                return HSVaColor(...values);
+            })
+        };
+
+        // Set initial gradient colors
+        this._updateGradientColors();
+
+        // Bind gradient events
+        this._bindGradientEvents();
+    }
+
+    _bindGradientEvents() {
+        const {_root} = this;
+        const gradient = _root.gradient;
+
+        if (!gradient) return;
+
+        // Enable/disable gradient
+        _.on(gradient.gradientEnabled, 'change', () => {
+            this._gradientState.enabled = gradient.gradientEnabled.checked;
+            this._updateGradientColors();
+            this._updateOutput('gradient');
+        });
+
+        // Change gradient type
+        _.on(gradient.gradientType, 'change', () => {
+            this._gradientState.type = gradient.gradientType.value;
+            this._updateGradientColors();
+            this._updateOutput('gradient');
+        });
+
+        // Change gradient angle
+        _.on(gradient.gradientAngle, 'input', () => {
+            this._gradientState.angle = parseInt(gradient.gradientAngle.value);
+            this._updateGradientColors();
+            this._updateOutput('gradient');
+        });
+
+        // Select gradient color
+        _.on([gradient.color1, gradient.color2], 'click', e => {
+            if (!this._gradientState || !this._gradientState.colors) return;
+
+            const index = e.target === gradient.color1 ? 0 : 1;
+            this._gradientState.activeColor = index;
+
+            // Update active state
+            gradient.color1.classList.toggle('active', index === 0);
+            gradient.color2.classList.toggle('active', index === 1);
+
+            // Set current color to active gradient color if it exists
+            const selectedColor = this._gradientState.colors[index];
+            if (selectedColor && typeof selectedColor.toHSVA === 'function') {
+                this.setHSVA(...selectedColor.toHSVA(), true);
+            }
+        });
+
+        // Update gradient colors when main color changes
+        this.on('change', (color) => {
+            if (this._gradientState?.enabled && this._gradientState?.colors) {
+                const activeIndex = this._gradientState.activeColor;
+                if (typeof activeIndex === 'number' && this._gradientState.colors[activeIndex]) {
+                    this._gradientState.colors[activeIndex] = color;
+                    this._updateGradientColors();
+                }
+            }
+        });
+    }
+
+    _updateGradientColors() {
+        const {_root, _gradientState} = this;
+        const gradient = _root.gradient;
+
+        if (!gradient || !_gradientState) return;
+
+        // Get all gradient color elements
+        const colorElements = gradient.colors.querySelectorAll('.pcr-gradient-color');
+
+        // Update each color element
+        colorElements.forEach((el, index) => {
+            if (_gradientState.colors[index]) {
+                el.style.setProperty('--pcr-color', _gradientState.colors[index].toRGBA());
+            }
+        });
+
+        // Update gradient preview
+        const {type, angle, colors} = _gradientState;
+        const gradientStr = type === 'linear'
+            ? `linear-gradient(${angle}deg, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`
+            : type === 'radial'
+                ? `radial-gradient(circle, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`
+                : `conic-gradient(from ${angle}deg, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`;
+
+        gradient.preview.style.background = gradientStr;
+    }
+
     _rePositioningPicker() {
         const {options} = this;
 
@@ -528,7 +645,7 @@ export default class Pickr {
     }
 
     _updateOutput(eventSource) {
-        const {_root, _color, options} = this;
+        const {_root, _color, options, _gradientState} = this;
 
         // Check if component is present
         if (_root.interaction.type()) {
@@ -537,6 +654,19 @@ export default class Pickr {
             const method = `to${_root.interaction.type().getAttribute('data-type')}`;
             _root.interaction.result.value = typeof _color[method] === 'function' ?
                 _color[method]().toString(options.outputPrecision) : '';
+        }
+
+        if (_gradientState?.enabled) {
+            const {type, angle, colors} = this._gradientState;
+            const gradientStr = type === 'linear'
+                ? `linear-gradient(${angle}deg, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`
+                : type === 'radial'
+                    ? `radial-gradient(circle, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`
+                    : `conic-gradient(from ${angle}deg, ${colors[0].toRGBA()}, ${colors[1].toRGBA()})`;
+
+            if (_root.interaction.result) {
+                _root.interaction.result.value = gradientStr;
+            }
         }
 
         // Fire listener if initialization is finish
