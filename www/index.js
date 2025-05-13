@@ -22,6 +22,8 @@ const themes = [
             ],
             gradient:{
                 enabled: true,
+                angle : 50,
+                type : 'radial',
                 colors:["#ff0000", "#00ff00"]
             },
             components: {

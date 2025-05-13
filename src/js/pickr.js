@@ -540,6 +540,11 @@ export default class Pickr {
             })
         };
 
+        // Set initial UI state
+        gradient.gradientEnabled.checked = options.gradient.enabled;
+        gradient.gradientType.value = options.gradient.type;
+        gradient.gradientAngle.value = options.gradient.angle;
+
         // Set initial gradient colors
         this._updateGradientColors();
 
