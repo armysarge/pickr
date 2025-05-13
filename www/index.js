@@ -22,7 +22,7 @@ const themes = [
             ],
             gradient:{
                 enabled: true,
-                colors:[]
+                colors:["#ff0000", "#00ff00"]
             },
             components: {
                 preview: true,
