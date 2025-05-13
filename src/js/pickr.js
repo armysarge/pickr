@@ -33,7 +33,13 @@ export default class Pickr {
         'aria:input': 'color input field',
         'aria:palette': 'color selection area',
         'aria:hue': 'hue selection slider',
-        'aria:opacity': 'selection slider'
+        'aria:opacity': 'selection slider',
+
+        // Strings used for gradient
+        'aria:gradient:enable': 'enable gradient mode',
+        'aria:gradient:angle': 'gradient angle',
+        'aria:gradient:color1': 'gradient color 1',
+        'aria:gradient:color2': 'gradient color 2',
     };
 
     // Default options

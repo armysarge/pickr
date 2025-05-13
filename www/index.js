@@ -20,7 +20,10 @@ const themes = [
                 'rgba(255, 235, 59, 0.95)',
                 'rgba(255, 193, 7, 1)'
             ],
-
+            gradient:{
+                enabled: true,
+                colors:[]
+            },
             components: {
                 preview: true,
                 opacity: true,

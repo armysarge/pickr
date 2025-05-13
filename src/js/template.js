@@ -49,7 +49,7 @@ export default instance => {
             <div class="pcr-gradient-header">
               <div class="pcr-gradient-heading">Gradient</div>
               <label class="pcr-gradient-switch">
-                <input type="checkbox" :ref="gradientEnabled" checked aria-label="${t('aria:gradient:enable', 'enable gradient mode')}">
+                <input type="checkbox" :ref="gradientEnabled" aria-label="${t('aria:gradient:enable', 'enable gradient mode')}">
                 <span class="pcr-gradient-slider"></span>
               </label>
             </div>
